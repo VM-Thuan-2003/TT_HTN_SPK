@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-
+from time import sleep
 btn = 4
 led = 5
 
@@ -7,7 +7,7 @@ state = 0
 
 def setup():
 	GPIO.setmode(GPIO.BCM)
-	GPIO.setup(btn, GPIO.IN)
+	GPIO.setup(btn, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 	GPIO.setup(led,GPIO.OUT)
 
 def main():

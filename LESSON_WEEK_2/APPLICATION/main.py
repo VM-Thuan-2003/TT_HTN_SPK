@@ -1,43 +1,42 @@
-import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout
+import bluetooth
 
-class MyApplication(QWidget):
-    def __init__(self):
-        super().__init__()
+import RPi.GPIO as GPIO
 
-        self.initUI()
+led = 2
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(led, GPIO.OUT)
+host = ""
+port = 1
+server = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+print('Bluetooth Socket Created')
 
-    def initUI(self):
-        # Create widgets
-        label = QLabel('Hello, PyQt!')
-        button = QPushButton('Click me!')
+try:
+    server.bind((host, port))
+    print("Bluetooth Binding Completed")
+except:
+    print("Bluetooth Binding Failed")
+    
+server.listen(5) # One connection at a time
+client, address = server.accept()
+print("Connected To", address)
+print("Client:", client)
 
-        # Connect button click event to a function
-        button.clicked.connect(self.onButtonClick)
+try:
+    while True:
+        data = client.recv(1024)
+        print(data)
+        if data == "1":
+            GPIO.OUTPUT(led,1)
+            send_data = "Light On"
+        elif data == "0":
+            GPIO.OUTPUT(led,0)
+            send_data = "Light Off"
+        else:
+            send_data = "Type 1 or 0"
 
-        # Create layout
-        layout = QVBoxLayout()
-        layout.addWidget(label)
-        layout.addWidget(button)
-
-        # Set the layout for the main window
-        self.setLayout(layout)
-
-        # Set window properties
-        self.setGeometry(100, 100, 300, 200)
-        self.setWindowTitle('My PyQt Application')
-
-    def onButtonClick(self):
-        # Function to handle button click
-        print('Button clicked!')
-
-if __name__ == '__main__':
-    # Create the application instance
-    app = QApplication(sys.argv)
-
-    # Create and show the main window
-    window = MyApplication()
-    window.show()
-
-    # Run the application event loop
-    sys.exit(app.exec_())
+        client.send(send_data)
+except:
+    GPIO.cleanup()
+    client.close()
+    server.close()

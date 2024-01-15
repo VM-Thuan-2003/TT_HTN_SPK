@@ -18,7 +18,7 @@ def setup():
 	GPIO.setup(btn, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 	GPIO.setup(led_green,GPIO.OUT)
 	GPIO.setup(led_red,GPIO.OUT)
-	GPIO.setup(led_yellow,GPIO.OUT)l
+	GPIO.setup(led_yellow,GPIO.OUT)
 
 	GPIO.output(led_green, 0)
 	GPIO.output(led_red, 0)

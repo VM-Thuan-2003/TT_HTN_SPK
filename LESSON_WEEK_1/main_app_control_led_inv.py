@@ -70,7 +70,7 @@ def style_info():
 	label_3.place(x=50,y=300)
 	label_4 = Label(window, text = "Thành viên 2: Lê Quang Thương - MSSV: 21161363")
 	label_4.place(x=50,y=320)
-	label_5 = Label(window, text = "Thành viên 3: Trần Thị Xuân Hy - MSSV: 21161342")
+	label_5 = Label(window, text = "Thành viên 3: Trần Thị Xuân Hy - MSSV: 21161323")
 	label_5.place(x=50,y=340)
 
 def style_window():

@@ -1,7 +1,8 @@
 import bluetooth
 # Importing the GPIO library to use the GPIO pins of Raspberry pi
 import RPi.GPIO as GPIO
-led_pin = 4     # Initializing pin 40 for led
+led_pin = 2     # Initializing pin 40 for led
+GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)  # Using BCM numbering
 GPIO.setup(led_pin, GPIO.OUT)   # Declaring the pin 40 as output pin
 host = ""
@@ -23,12 +24,11 @@ try:
         while True:
                 # Receivng the data.
                 data = client.recv(1024) # 1024 is the buffer size.
-                print(data)
-
-                if data == "1":
+                print(data.decode('utf-8'))
+                if data.decode('utf-8') == "1":
                         GPIO.output(led_pin, True)
                         send_data = "Light On "
-                elif data == "0":
+                elif data.decode('utf-8') == "0":
                         GPIO.output(led_pin, False)
                         send_data = "Light Off "
                 else:

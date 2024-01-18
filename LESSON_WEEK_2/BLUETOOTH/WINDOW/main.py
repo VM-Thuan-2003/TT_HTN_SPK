@@ -5,7 +5,7 @@ client.connect(("B8:27:EB:0E:F2:0D",1))
 
 try:
     while True:
-        msg = input("Enter msg: ...")
+        msg = input("Enter msg: ")
         client.send(str(msg).encode("utf-8"))
         data = client.recv(1024)
         if not data:

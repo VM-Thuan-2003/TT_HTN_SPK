@@ -1,43 +1,33 @@
 from tkinter import *
 import socket
+import bluetooth
+
+height = 500
+width  = 600
+
+
 
 window = Tk()
-window.geometry("500x400")
+window.geometry("600x500")
 window.title("ung dung ket noi Bluetooth")
 
-client = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-client.connect(("B8:27:EB:0E:F2:0D",1))
+def text(text, place, font, size, color="black"):
+	txt = Label(window, text = text )
+	txt.place(x=place[0],y=place[1])
+	txt.config(font=(str(font),size), fg=color)
 
-def style_info():
-	# height = 200 - width = 500
-	label_1 = Label(window, fg="red",text = "Bài tập: Ứng dụng điều khiển led có đảo chiều")
-	label_1.place(x=50,y=200)
-	label_1.config(font =("Courier", 11))
-	label_2 = Label(window, text = "Tên nhóm: 3 con báo")
-	label_2.place(x=50,y=250)
-	label_2.config(font =("Courier", 14))
-	label_3 = Label(window, text = "Thành viên 1: Võ Minh Thuận - MSSV: 21161366")
-	label_3.place(x=50,y=300)
-	label_4 = Label(window, text = "Thành viên 2: Lê Quang Thương - MSSV: 21161363")
-	label_4.place(x=50,y=320)
-	label_5 = Label(window, text = "Thành viên 3: Trần Thị Xuân Hy - MSSV: 21161342")
-	label_5.place(x=50,y=340)
+def info():
+	text("Đề tài: App Điều Khiển Raspberry qua Bluetooth",(10,height - 160),"Arial",12,color="red")
+	text("Nhóm: Nhóm 4",(10,height - 130),"Arial",12)
+	text("Thành viên:",(10,height - 130 + 24*1),"Arial",12)
+	text("* Võ Minh Thuận    - 21161366",(12,height - 130 + 24*2),"Arial",12)
+	text("* Trần Thị Xuân Hy - 21161367",(12,height - 130 + 24*3),"Arial",12)
+	text("* Lê Quang Thương  - 21161323",(12,height - 130 + 24*4),"Arial",12)
 
-def style_window():
-	# height = 200 - width = 500
-    pass
 
-def send_payload(name, msg):
-    payload = {
-        "name": name,
-        "msg": msg
-    }
-    client.send(str(payload).encode("utf-8"))
 
 def main():
-    style_info()
-    style_window()
-    window.mainloop()
-
+	info()
+	window.mainloop()
 if __name__ == '__main__':
 	main()

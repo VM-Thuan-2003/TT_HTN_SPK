@@ -1,6 +1,6 @@
 from tkinter import *
 import socket
-from bluetooth import *
+# from bluetooth import *
 
 height = 500
 width  = 600
@@ -23,18 +23,25 @@ def info():
 	text("* Trần Thị Xuân Hy - 21161367",(12,height - 130 + 24*3),"Arial",12)
 	text("* Lê Quang Thương  - 21161323",(12,height - 130 + 24*4),"Arial",12)
 
-def scan_bluetooth():
-	nearby_devices = discover_devices(lookup_names = True)
-	len_nearby_devices = len(nearby_devices)
-	if len_nearby_devices > 0: 
-		for i in range(len_nearby_devices):
-			addr = nearby_devices[i][0]
-			name = nearby_devices[i][1]
-			print(name, addr)
-			text(name + " - " + addr, (10, 20*(i+1)), "Arial", 10)
+# def scan_bluetooth():
+# 	nearby_devices = discover_devices(lookup_names = True)
+# 	len_nearby_devices = len(nearby_devices)
+# 	if len_nearby_devices > 0: 
+# 		for i in range(len_nearby_devices):
+# 			addr = nearby_devices[i][0]
+# 			name = nearby_devices[i][1]
+# 			print(name, addr)
+# 			text(name + " - " + addr, (10, 20*(i+1)), "Arial", 10)
+
+def connect_bluetooth(mac):
+	client = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+	client.connect(("B8:27:EB:0E:F2:0D",1))
+
+
 def layout_main():
-	scanBlue = Button(window, text="Scan Bluetooth", width=20, bg="gray", fg="black",command=scan_bluetooth)
-	scanBlue.place(x=10, y=10)
+    pass
+# 	scanBlue = Button(window, text="Scan Bluetooth", width=20, bg="gray", fg="black",command=scan_bluetooth)
+# 	scanBlue.place(x=10, y=10)
 def main():
 	info()
 	layout_main()

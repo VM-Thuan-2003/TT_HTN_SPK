@@ -1,43 +1,78 @@
-import bluetooth
-# Importing the GPIO library to use the GPIO pins of Raspberry pi
 import RPi.GPIO as GPIO
-led_pin = 2     # Initializing pin 40 for led
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)  # Using BCM numbering
-GPIO.setup(led_pin, GPIO.OUT)   # Declaring the pin 40 as output pin
+
+import bluetooth
+
+def control_led(name, state):
+        GPIO.output(name, state)
+
+off = 0
+on  = 1
+
+led_1 = 2
+led_2 = 3
+
+port = 1
 host = ""
-port = 1        # Raspberry Pi uses port 1 for Bluetooth Communication
-# Creaitng Socket Bluetooth RFCOMM communication
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(led_1, GPIO.OUT)
+GPIO.setup(led_2, GPIO.OUT)
+
+GPIO.output(led_1, off)
+GPIO.output(led_2, off)
+
 server = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-print('Bluetooth Socket Created')
+
 try:
         server.bind((host, port))
         print("Bluetooth Binding Completed")
 except:
         print("Bluetooth Binding Failed")
-server.listen(1) # One connection at a time
-# Server accepts the clients request and assigns a mac address.
+
+server.listen(1)
+
 client, address = server.accept()
 print("Connected To", address)
 print("Client:", client)
+
 try:
         while True:
-                # Receivng the data.
-                data = client.recv(1024) # 1024 is the buffer size.
-                print(data.decode('utf-8'))
-                if data.decode('utf-8') == "1":
-                        GPIO.output(led_pin, True)
-                        send_data = "Light On "
-                elif data.decode('utf-8') == "0":
-                        GPIO.output(led_pin, False)
-                        send_data = "Light Off "
+                data = client.recv(1024).decode('utf-8')
+                print(data)
+                
+                if data == "led_1_on":
+                        control_led(led_1,on)
+                        send_data = "led_1 is on"
+                elif data == "led_1_off":
+                        control_led(led_1,off)
+                        send_data = "led_1 is off"
+                elif data == "led_2_on":
+                        control_led(led_2,on)
+                        send_data = "led_2 is on"
+                elif data == "led_2_off":
+                        control_led(led_2,off)
+                        send_data = "led_2 is off"
+                elif data == "led_inv":
+                        if(GPIO.input(led_1) == on):
+                                control_led(led_1,off)
+                        else:
+                               control_led(led_1,on)
+
+                        if(GPIO.input(led_2) == on):
+                                control_led(led_2,off)
+                        else:
+                               control_led(led_2,on) 
+
+                        send_data = "led is inv - " + str(GPIO.input(led_1)) + " - " + str(GPIO.input(led_2))
                 else:
-                        send_data = "Type 1 or 0 "
-                # Sending the data.
-                client.send(send_data)
+                        send_data = "nhap lai....."
+
+
+                client.send(send_data.encode("utf-8"))
 except:
-        # Making all the output pins LOW
         GPIO.cleanup()
-        # Closing the client and server connection
+
         client.close()
         server.close()

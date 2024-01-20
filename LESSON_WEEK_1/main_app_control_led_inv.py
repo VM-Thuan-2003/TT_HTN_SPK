@@ -93,8 +93,6 @@ def style_window():
 	B3 = Button(window, text="INV", width=20, bg="yellow", fg="black", command=control_light_inv)
 	B3.place(x=50,y=150)
 
-
-
 def main():
 	setup()
 	style_info()

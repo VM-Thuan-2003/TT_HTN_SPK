@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 led_1  = 2
 led_2  = 3
 
-PORT = 5050
+PORT = 8080
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)

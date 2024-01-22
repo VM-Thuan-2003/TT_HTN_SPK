@@ -91,7 +91,7 @@ class App:
         self.send_command("led_2_on")
 
     def led_2_off(self):
-        self.send_command("led_inv")
+        self.send_command("led_2_off")
 
     def led_inv(self):
         self.send_command("led_inv")

@@ -40,7 +40,7 @@ class App:
         self.root.title("Ứng dụng kết nối Bluetooth")
 
         # Thay đổi địa chỉ MAC và cổng theo yêu cầu
-        self.controller = BluetoothController("DC:A6:32:11:2A:6E", 1)
+        self.controller = BluetoothController("B8:27:EB:0E:F2:0D", 1)
 
         self.connect_button = ttk.Button(
             root, text="Connect", command=self.connect)

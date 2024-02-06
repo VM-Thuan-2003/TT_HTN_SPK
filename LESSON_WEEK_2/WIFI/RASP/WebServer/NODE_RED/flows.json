@@ -1,0 +1,243 @@
+[
+    {
+        "id": "7b20f3beca3c6453",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "01b214ab2da1cae5",
+        "type": "switch",
+        "z": "7b20f3beca3c6453",
+        "name": "on_off_led_1",
+        "property": "payload",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": true,
+        "outputs": 2,
+        "x": 610,
+        "y": 340,
+        "wires": [
+            [
+                "df3759503925d24a",
+                "4409cdf07a9a0a84"
+            ],
+            [
+                "df3759503925d24a",
+                "4409cdf07a9a0a84"
+            ]
+        ]
+    },
+    {
+        "id": "fc9b2f8b4054bf82",
+        "type": "inject",
+        "z": "7b20f3beca3c6453",
+        "name": "true",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 370,
+        "y": 340,
+        "wires": [
+            [
+                "01b214ab2da1cae5"
+            ]
+        ]
+    },
+    {
+        "id": "0de9540e65291abf",
+        "type": "inject",
+        "z": "7b20f3beca3c6453",
+        "name": "false",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "false",
+        "payloadType": "bool",
+        "x": 370,
+        "y": 380,
+        "wires": [
+            [
+                "01b214ab2da1cae5"
+            ]
+        ]
+    },
+    {
+        "id": "df3759503925d24a",
+        "type": "debug",
+        "z": "7b20f3beca3c6453",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "4409cdf07a9a0a84",
+        "type": "rpi-gpio out",
+        "z": "7b20f3beca3c6453",
+        "name": "led_1",
+        "pin": "2",
+        "set": false,
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "bcm": true,
+        "x": 950,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "3e3f22eaf3097a32",
+        "type": "switch",
+        "z": "7b20f3beca3c6453",
+        "name": "on_off_led_2",
+        "property": "payload",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": true,
+        "outputs": 2,
+        "x": 610,
+        "y": 460,
+        "wires": [
+            [
+                "4e5182340078e4b8",
+                "df3759503925d24a"
+            ],
+            [
+                "4e5182340078e4b8",
+                "df3759503925d24a"
+            ]
+        ]
+    },
+    {
+        "id": "276217db14ba44be",
+        "type": "inject",
+        "z": "7b20f3beca3c6453",
+        "name": "true",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 370,
+        "y": 460,
+        "wires": [
+            [
+                "3e3f22eaf3097a32"
+            ]
+        ]
+    },
+    {
+        "id": "828c980eb08ae628",
+        "type": "inject",
+        "z": "7b20f3beca3c6453",
+        "name": "false",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "false",
+        "payloadType": "bool",
+        "x": 370,
+        "y": 500,
+        "wires": [
+            [
+                "3e3f22eaf3097a32"
+            ]
+        ]
+    },
+    {
+        "id": "4e5182340078e4b8",
+        "type": "rpi-gpio out",
+        "z": "7b20f3beca3c6453",
+        "name": "led_2",
+        "pin": "3",
+        "set": true,
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "bcm": true,
+        "x": 950,
+        "y": 420,
+        "wires": []
+    }
+]

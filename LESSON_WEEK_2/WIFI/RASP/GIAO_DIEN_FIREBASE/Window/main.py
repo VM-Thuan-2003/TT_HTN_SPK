@@ -33,19 +33,19 @@ class App:
         self.info()
         self.layout_main()
     def led_1_on(self):
-        self.firebase.send_command(True,"control","led_1")
+        self.firebase.send_command("true","control","led_1")
         self.label_log.config(text="led_1: "+ str(self.firebase.fetch_data("control/led_1")))
     def led_1_off(self):
-        self.firebase.send_command(False,"control","led_1")
+        self.firebase.send_command("false","control","led_1")
         self.label_log.config(text="led_1: "+ str(self.firebase.fetch_data("control/led_1")))
     def led_2_on(self):
-        self.firebase.send_command(True,"control","led_2")
+        self.firebase.send_command("true","control","led_2")
         self.label_log.config(text="led_2: "+ str(self.firebase.fetch_data("control/led_2")))
     def led_2_off(self):
-        self.firebase.send_command(False,"control","led_2")
+        self.firebase.send_command("false","control","led_2")
         self.label_log.config(text="led_2: "+ str(self.firebase.fetch_data("control/led_2")))
     def led_inv(self):
-        self.firebase.send_command("inv","control","led")
+        self.firebase.send_command('"inv"',"control","led")
         self.label_log.config(text="led: "+ str(self.firebase.fetch_data("control/led")))
     def layout_main(self):
         B11 = ttk.Button(self.root, text="LED 1 ON ",

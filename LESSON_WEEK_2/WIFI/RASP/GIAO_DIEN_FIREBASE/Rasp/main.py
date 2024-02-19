@@ -18,7 +18,7 @@ key = "./tt-htn-3-con-bao-firebase-adminsdk-bkjw3-a06594cb50.json"
 
 time_curr = 0;
 time_prev = 0;
-time_delay = 0.1;
+time_delay = 0.5;
 
 def control_led(name, state):
 	GPIO.output(name, state)
@@ -26,10 +26,10 @@ def control_led(name, state):
 def control(name,dt):
 	if dt == "true":
 		control_led(name, on)
-		return str(name) + ": on"
+		return "done"
 	elif dt == "false":
 		control_led(name, off)
-		return str(name) + ": off"
+		return "done"
 	elif dt == '"inv"':
 		if(GPIO.input(led_1) == on):
 		        control_led(led_1,off)
@@ -40,9 +40,9 @@ def control(name,dt):
 		        control_led(led_2,off)
 		else:
 		       control_led(led_2,on) 
-		return "led inv: " + str(GPIO.input(led_1)) + " - " + str(GPIO.input(led_2))
+		return "done"
 	else:
-		return dt
+		return "none"
 def main():
 	global time_curr, time_prev, time_delay
 

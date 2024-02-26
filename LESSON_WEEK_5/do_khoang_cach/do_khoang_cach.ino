@@ -4,7 +4,7 @@
 
    modified on the 29 Oct 2015
    by Okpaluba Chibuike
-   <chibuikepraise@gmail.com>
+   <chibuikepraise@gmail.com>S
  */
  
 #include <Ultrasonic.h>

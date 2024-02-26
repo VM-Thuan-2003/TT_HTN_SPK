@@ -23,7 +23,7 @@ try:
         # Read data from Arduino
         data = ser.readline().decode('utf-8').strip()
         
-        if data:
+        if data:    
             rst1 = db.reference("sensor/sr04").set(data)
             print("Arduino says:", data)
 

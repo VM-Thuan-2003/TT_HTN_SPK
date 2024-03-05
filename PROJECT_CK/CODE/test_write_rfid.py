@@ -5,10 +5,16 @@ import json
 
 # gpg --gen-random --armor 1 18 -> to create security_code
 
-security_code = "3w+P+H3N9ENQUD6urJwhCxU/"
+security_code = "jPCufN8Qd+o="
+
+# secr is security_code
+# lvl is level
+# st is state
+
 payload = {
-	"security_code":security_code,
-	"level" : "client",
+	"secr":security_code,
+	"lvl" : "client",
+	# "st": "NONE"
 }
 
 def main():
@@ -17,9 +23,6 @@ def main():
 	
 	reader = SimpleMFRC522()
 	try:
-		
-		id = "0355524273-21161366 - "
-		text = "vo minh thuan"
 		reader.write(json.dumps(payload))
 	finally:
 		GPIO.cleanup()

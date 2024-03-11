@@ -12,7 +12,7 @@ cred = credentials.Certificate(key)
 firebase_admin.initialize_app(cred,{"databaseURL":path_url})
 
 # Change the port parameter to match your Arduino's port
-ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 
 # Give some time for the serial connection to be established
 time.sleep(2)

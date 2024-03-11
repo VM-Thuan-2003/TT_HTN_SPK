@@ -2,16 +2,22 @@
 #include <LiquidCrystal_I2C.h>
 #include <Servo.h>
 
-#define pin_hr 10
-#define pin_servo 9
-#define pin_pir_1 11
-#define pin_pir_2 12
+#define pin_hr    A2
+#define pin_servo A1
+#define pin_pir_1 A3
+#define pin_pir_2 A4
 
 const int goc_servo[2] = {0,90};
 
 LiquidCrystal_I2C lcd(0X27, 16, 2);
 
 Servo myservo; 
+
+bool state_read_data_uart = false;
+
+void state_all_reset(){
+  state_read_data_uart = false;
+}
 
 void setup() {
   Serial.begin(9600);
@@ -20,27 +26,36 @@ void setup() {
   pinMode(pin_pir_1, INPUT);
   pinMode(pin_pir_2, INPUT);
   
+  state_all_reset();
+
   myservo.attach(pin_servo);
   myservo.write(goc_servo[0]);
 
   lcd.init();
   lcd.backlight();
+
+  lcd.setCursor(0, 0);
+  lcd.print("TT_HTN - PROJECT");
+  lcd.setCursor(0, 1);
+  lcd.print(" NHOM 3 CON BAO ");
+
+  delay(1000);
+  lcd.clear();
 }
 
 void loop() {
-  lcd.setCursor(2, 0);
-  lcd.print("DIEN TU DAT");
-  lcd.setCursor(0, 1);
-  lcd.print("Bai Test LCD I2C ");
-  // delay(100);
-  int state_hr = digitalRead(pin_hr);
-  int state_pir_1 = digitalRead(pin_pir_1);
-  int state_pir_2= digitalRead(pin_pir_2);
+  bool state_hr    = digitalRead(pin_hr)    == 1 ? true : false;
+  bool state_pir_1 = digitalRead(pin_pir_1) == 1 ? true : false;
+  bool state_pir_2 = digitalRead(pin_pir_2) == 1 ? true : false;
 
-  Serial.print("state_hr: "); Serial.print(state_hr); Serial.print(" ");
-  Serial.print("state_pir_1: "); Serial.print(state_pir_1); Serial.print(" ");
-  Serial.print("state_pir_2: "); Serial.print(state_pir_2); Serial.println(" ");
-  
-  myservo.write(goc_servo[1]);
+  if (Serial.available() > 0) {
+    // Read the incoming data and print it to the Serial Monitor
+    char receivedChar = Serial.read();
+    Serial.print("Received: ");
+    Serial.println(receivedChar);
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print(receivedChar);
+  }
 
 }

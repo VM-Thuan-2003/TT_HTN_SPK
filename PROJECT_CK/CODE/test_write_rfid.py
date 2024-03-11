@@ -3,18 +3,12 @@ from mfrc522 import SimpleMFRC522
 import base64
 import json
 
-# gpg --gen-random --armor 1 18 -> to create security_code
-
-security_code = "jPCufN8Qd+o="
-
-# secr is security_code
-# lvl is level
-# st is state
+# fN : firstName
+# lf : lastName
 
 payload = {
-	"secr":security_code,
-	"lvl" : "client",
-	# "st": "NONE"
+	"_fN_" : "VO MINH",
+	"_lN_"  : "THUAN 2",
 }
 
 def main():

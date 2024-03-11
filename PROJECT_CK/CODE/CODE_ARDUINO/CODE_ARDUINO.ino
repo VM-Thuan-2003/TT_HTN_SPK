@@ -2,8 +2,13 @@
 #include <LiquidCrystal_I2C.h>
 #include <Servo.h>
 
+<<<<<<< HEAD
 #define pin_hr    A2
 #define pin_servo A1
+=======
+#define pin_hr    A1
+#define pin_servo A2
+>>>>>>> 1d74e4f (update code project finnal)
 #define pin_pir_1 A3
 #define pin_pir_2 A4
 

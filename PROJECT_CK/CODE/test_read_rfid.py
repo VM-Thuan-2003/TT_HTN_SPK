@@ -3,6 +3,10 @@ from mfrc522 import SimpleMFRC522
 import json
 import serial
 
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
+
 def main():
 	GPIO.setwarnings(False)
 	GPIO.setmode(GPIO.BCM)

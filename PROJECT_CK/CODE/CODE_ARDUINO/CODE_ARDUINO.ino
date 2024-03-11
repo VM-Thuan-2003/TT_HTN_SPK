@@ -2,13 +2,8 @@
 #include <LiquidCrystal_I2C.h>
 #include <Servo.h>
 
-<<<<<<< HEAD
-#define pin_hr    A2
-#define pin_servo A1
-=======
 #define pin_hr    A1
 #define pin_servo A2
->>>>>>> 1d74e4f (update code project finnal)
 #define pin_pir_1 A3
 #define pin_pir_2 A4
 
@@ -46,6 +41,7 @@ void setup() {
 
   delay(1000);
   lcd.clear();
+  Serial.println("__Arduino_start__");
 }
 
 void loop() {
@@ -53,11 +49,15 @@ void loop() {
   bool state_pir_1 = digitalRead(pin_pir_1) == 1 ? true : false;
   bool state_pir_2 = digitalRead(pin_pir_2) == 1 ? true : false;
 
+
+  
   if (Serial.available() > 0) {
     // Read the incoming data and print it to the Serial Monitor
-    char receivedChar = Serial.read();
-    Serial.print("Received: ");
-    Serial.println(receivedChar);
+    String receivedChar = Serial.readStringUntil('\n');
+    if(receivedChar == "__rasp_start__")
+      Serial.println("__rasp_start__");
+    else
+      Serial.println("__rasp_start__");
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print(receivedChar);

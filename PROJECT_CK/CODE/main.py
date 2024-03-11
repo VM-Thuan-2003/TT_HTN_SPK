@@ -38,7 +38,6 @@ class SerialData():
 			return None
 	def __write__(self, dt):
 		# dt type is string
-		payload = ""
 		payload = str.encode(dt + "\n")
 		self.ser.write(payload)
 	def __handel_serial__(self):
@@ -49,6 +48,7 @@ class SerialData():
 		if data:
 			if(data == "__Arduino_start__"):
 				self.state_start = yes
+				print("start begin")
 		return self.state_start
 if __name__ == '__main__':
 	try:
@@ -60,7 +60,7 @@ if __name__ == '__main__':
 		ser = SerialData('/dev/ttyUSB0',9600)
 		while True:
 			if(ser.__handel_serial_start__() == yes):
-				print("start")
+				ser.__handel_serial__()
 			
 	except KeyboardInterrupt:
 	    GPIO.cleanup()

@@ -51,36 +51,67 @@ class LineSlot():
 		self.fireBase = fireBase_
 		LineSlot.__check_init__(self)
 	def __check_init__(self):
-		isData, data_read = self.fireBase.__read__("empty_slot")
+		isData, data_read = self.fireBase.__read__("list_slot") # check if have data save in firebase
 		if isData is False:
-			# write data init to firebase
+			# write data empty slot and list slot init to firebase
 			self.fireBase.__write__("empty_slot", LineSlot.__check_empty_slot__(self))
+			self.fireBase.__write__("list_slot", LineSlot.__read_all_slot__(self))
 		else:
 			# write data init from firebase into rasp
-			self.empty_slot = data_read[0]
-			self.list_slot_empty = data_read[1]
-
-			print("__check_data__: ", "empty_slot", self.empty_slot, "list_slot_empty",self.list_slot_empty)
-
+			for i in range(len(data_read)):
+				dt = data_read[i].split("-")
+				x = int(dt[0])
+				y = int(dt[1])
+				pl = dt[2]
+				self.line[x][y] = pl
+			isDataE, data_read_E = self.fireBase.__read__("empty_slot") # check if have data save in firebase
+			if isDataE is True:
+				self.empty_slot = data_read_E[0]
+				self.list_slot_empty = data_read_E[1]
+				# print(data_read_E)
 	def __check_empty_slot__(self):
+		list_slot_empty_t = []
+		empty_slot_t = 0
 		for i in range(len(self.line)):
 			for y in range(len(self.line[i])):
-				if self.line[i][y] is None:
-					self.list_slot_empty.append(str(i) + "-" + str(y))
-					self.empty_slot = self.empty_slot + 1;
+				if self.line[i][y] is None or self.line[i][y] == "None":
+					list_slot_empty_t.append(str(i) + "-" + str(y))
+					empty_slot_t = empty_slot_t + 1;
+		self.empty_slot = empty_slot_t
+		self.list_slot_empty = list_slot_empty_t
 		return self.empty_slot, self.list_slot_empty
-
+	def __read_all_slot__(self):
+		slot = []
+		for i in range(len(self.line)):
+			for y in range(len(self.line[i])):
+				slot.append(str(i) + "-" + str(y) + "-" + str(self.line[i][y]))
+		return slot
+	def __check_data_slot(self, dt):
+		for i in range(len(self.line)):
+			for y in range(len(self.line[i])):
+				if dt == self.line[i][y]:
+					return True, str(i) + "-" + str(y)
+		return False, None
 	def __add_slot__(self,payload):
 		if len(self.list_slot_empty) > 0:
-			print(self.list_slot_empty[0])
-			data = self.list_slot_empty[0].split("-")
-			self.list_slot_empty.remove(self.list_slot_empty[0])
-			x = int(data[0])
-			y = int(data[1])
-			self.line[x][y] = payload
-			print(self.line)
-			return True
-		return False
+			if(LineSlot.__check_data_slot(self,payload)[0] is False):
+				data = self.list_slot_empty[0].split("-")
+				self.list_slot_empty.remove(self.list_slot_empty[0])
+				x = int(data[0])
+				y = int(data[1])
+				self.line[x][y] = payload
+				return True, data[0] + "-" + data[1]
+			return False, "duplicate id"
+		return False, "full slot"
+	def __remove_slot__(self,payload):
+		state, data = LineSlot.__check_data_slot(self,payload)
+		if state is True:
+			x = int(data.split("-")[0])
+			y = int(data.split("-")[1])
+			self.line[x][y] = "None"
+			return True, "Removed Id"
+		return False, "No Found Id"
+
 class Rfid():
 	def __init__(self):
 		self.reader = SimpleMFRC522()
@@ -158,12 +189,19 @@ if __name__ == '__main__':
 						try:
 							lastName = json.loads(text)["_lN_"]
 							firstName = json.loads(text)["_fN_"]
+							fullName = firstName + lastName
 							if(state_mode == ModeVao):
-								ser.__write__(str(id))
-								lineSlot.__add_slot__(lastName)
+								isDoneAdd, data_add = lineSlot.__add_slot__(str(id)+","+fullName)
+								ser.__write__(data_add)
+								if isDoneAdd is True:
+									fireBase.__write__("list_slot", lineSlot.__read_all_slot__())
+									fireBase.__write__("empty_slot", lineSlot.__check_empty_slot__())
 							else:
-								ser.__write__(str(id))
-								lineSlot.__add_slot__(lastName)
+								isDoneRmv, data_rmv = lineSlot.__remove_slot__(str(id)+","+fullName)
+								ser.__write__(data_rmv)
+								if isDoneRmv is True:
+									fireBase.__write__("list_slot", lineSlot.__read_all_slot__())
+									fireBase.__write__("empty_slot", lineSlot.__check_empty_slot__())
 						except Exception as e:
 							raise e
 

@@ -2,11 +2,13 @@
 #include <LiquidCrystal_I2C.h>
 #include <Servo.h>
 
+
+
 #define pinServo  A0
 #define pinPir_1  A1
 #define pinPir_2  A2
 #define pinHr     A3
-#define pinModeSw A3
+#define pinModeSw 8
 
 #define modeRa  0
 #define modeVao 1
@@ -71,7 +73,7 @@ void loop(){
   if(stateMode != stateMode_prev){
     stateMode_prev = stateMode;
     reset_all_state();
-    Serial.println(stateMode == 1 ? "modeRa" : "modeVao");
+    Serial.println(stateMode == 1 ? "modeVao" : "modeRa");
   }
   
   if(stateMode == modeVao){
@@ -89,7 +91,16 @@ void loop(){
       }
     }
     if(state_read_vao == true){
-      
+      String data = read_data_serial();
+      if(data != "NULL"){
+        if(state_temp_1time_3 == false){
+          state_temp_1time_3 = true;
+          lcd_log(2,"Da xac nhan",0, data);
+          Serial.println("ready_input_gate_done");
+          delay(2000);
+          reset_all_state();
+        }
+      }
     }
   }
   else{
@@ -105,6 +116,18 @@ void loop(){
         state_read_ra  = true;
         lcd_log(4,"Xin Chao",2, "Quet The Ra");
         Serial.println("ready_output_gate");
+      }
+    }
+    if(state_read_ra == true){
+      String data = read_data_serial();
+      if(data != "NULL"){
+        if(state_temp_1time_3 == false){
+          state_temp_1time_3 = true;
+          lcd_log(2,"Da xac nhan",0, data);
+          Serial.println("ready_output_gate_done");
+          delay(2000);
+          reset_all_state();
+        }
       }
     }
   }
@@ -128,4 +151,5 @@ String read_data_serial() {
     String receivedChar = Serial.readStringUntil('\n');
     return receivedChar;
   }
+  return "NULL";
 }

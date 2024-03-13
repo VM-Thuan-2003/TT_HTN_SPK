@@ -13,7 +13,7 @@
 
 #define sl_xe_max 4
 
-const int goc_servo[2] = { 0, 90 };
+const int goc_servo[2] = { 0, 120 };
 
 LiquidCrystal_I2C lcd(0X27, 16, 2);
 
@@ -25,7 +25,7 @@ bool state_read_vao, state_read_ra;
 bool state_read_done_vao, state_read_done_ra;
 bool state_read_rfid;
 
-int sl_xe_curr = 0; 
+bool state_servo_on;
 
 void setup(){
   Serial.begin(9600);
@@ -47,13 +47,13 @@ void setup(){
   delay(2000);
   lcd.clear();
 
-  sl_xe_curr = 0;
-
   stateMode_prev = 2;
   state_temp_1time_1 = false; state_temp_1time_2 = false; state_temp_1time_3 = false;
   state_read_vao = false, state_read_ra = false;
   state_read_done_vao = false, state_read_done_ra = false;
   state_read_rfid = false;
+
+  state_servo_on = false;
 
   Serial.println("__Arduino_start__");
 }
@@ -63,7 +63,7 @@ void loop(){
     statePir_1 -> vao
     statePir_2 -> ra
   */
-  bool stateHr = digitalRead(pinHr) == 1 ? true : false;
+  bool stateHr = digitalRead(pinHr) == 0 ? true : false;
   bool statePir_1 = digitalRead(pinPir_1) == 1 ? true : false; 
   bool statePir_2 = digitalRead(pinPir_2) == 1 ? true : false;
   bool stateMode = digitalRead(pinModeSw) == 1 ? modeRa : modeVao;
@@ -71,7 +71,7 @@ void loop(){
   if(stateMode != stateMode_prev){
     stateMode_prev = stateMode;
     reset_all_state();
-    Serial.println(stateMode == 1 ? "modeRa" : "modeVao");
+    Serial.println(stateMode == 1 ? "modeVao" : "modeRa");
   }
   
   if(stateMode == modeVao){
@@ -89,7 +89,25 @@ void loop(){
       }
     }
     if(state_read_vao == true){
-      
+      String data = read_data_serial();
+      if(data != "NULL"){
+        if(state_temp_1time_3 == false){
+          state_temp_1time_3 = true;
+          lcd_log(2,"Da xac nhan",0, data);
+          Serial.println("ready_input_gate_done");
+          myservo.write(goc_servo[1]); // servo on
+          state_read_done_vao = true;
+          state_read_done_ra  = false;
+//          delay(2000);
+//          reset_all_state();
+        }
+      }
+    }
+    if(state_read_done_vao == true){
+        if(stateHr == true){
+          myservo.write(goc_servo[0]);
+          reset_all_state();
+        }
     }
   }
   else{
@@ -105,6 +123,27 @@ void loop(){
         lcd_log(4,"Xin Chao",2, "Quet The Ra");
         Serial.println("ready_output_gate");
       }
+    }
+    if(state_read_ra == true){
+      String data = read_data_serial();
+      if(data != "NULL"){
+        if(state_temp_1time_3 == false){
+          state_temp_1time_3 = true;
+          lcd_log(2,"Da xac nhan",0, data);
+          Serial.println("ready_output_gate_done");
+          myservo.write(goc_servo[1]); // servo on
+          state_read_done_vao = false;
+          state_read_done_ra  = true;
+//          delay(2000);
+//          reset_all_state();
+        }
+      }
+    }
+    if(state_read_done_ra == true){
+        if(stateHr == true){
+          myservo.write(goc_servo[0]);
+          reset_all_state();
+        }
     }
   }
 }
@@ -127,4 +166,5 @@ String read_data_serial() {
     String receivedChar = Serial.readStringUntil('\n');
     return receivedChar;
   }
+  return "NULL";
 }

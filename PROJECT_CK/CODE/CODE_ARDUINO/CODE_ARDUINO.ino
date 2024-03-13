@@ -6,7 +6,7 @@
 #define pinPir_1  A1
 #define pinPir_2  A2
 #define pinHr     A3
-#define pinModeSw A3
+#define pinModeSw 8
 
 #define modeRa  0
 #define modeVao 1
@@ -97,7 +97,6 @@ void loop(){
     if(state_temp_1time_1 == false){
       state_temp_1time_1 = true;
       lcd_log(3,"Lay Xe Ve",4, "Quet The");
-      Serial.println("ready_output_gate");
     }
     if(statePir_2 == true && state_read_done_ra == false){
       if(state_temp_1time_2 == false){

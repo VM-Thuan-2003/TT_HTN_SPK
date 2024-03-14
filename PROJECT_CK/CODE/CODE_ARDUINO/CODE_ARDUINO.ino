@@ -157,23 +157,13 @@ void loop()
         }
       }
     }
-  }
-  else
-  {
-    // handle some statements about session output gate
-    if (state_temp_1time_1 == false)
+    else
     {
-      state_temp_1time_1 = true;
-      lcd_log(3, "Lay Xe Ve", 4, "Quet The");
-    }
-    if (statePir_2 == true && state_read_done_ra == false)
-    {
-      if (state_temp_1time_2 == false)
+      // handle some statements about session output gate
+      if (state_temp_1time_1 == false)
       {
-        state_temp_1time_2 = true;
-        state_read_ra = true;
-        lcd_log(4, "Xin Chao", 2, "Quet The Ra");
-        Serial.println("ready_output_gate");
+        state_temp_1time_1 = true;
+        lcd_log(3, "Lay Xe Ve", 4, "Quet The");
       }
       if (statePir_2 == true && state_read_done_ra == false)
       {
@@ -184,74 +174,83 @@ void loop()
           lcd_log(4, "Xin Chao", 2, "Quet The Ra");
           Serial.println("ready_output_gate");
         }
-      }
-      if (state_read_ra == true)
-      {
-        String data = read_data_serial();
-        if (data != "NULL")
+        if (statePir_2 == true && state_read_done_ra == false)
         {
-          if (state_temp_1time_3 == false)
+          if (state_temp_1time_2 == false)
           {
-            state_temp_1time_3 = true;
-            if (data == "No Found Id")
+            state_temp_1time_2 = true;
+            state_read_ra = true;
+            lcd_log(4, "Xin Chao", 2, "Quet The Ra");
+            Serial.println("ready_output_gate");
+          }
+        }
+        if (state_read_ra == true)
+        {
+          String data = read_data_serial();
+          if (data != "NULL")
+          {
+            if (state_temp_1time_3 == false)
             {
-              lcd_log(2, "That bai", 0, data);
-              Serial.println("ready_output_gate_fail");
-              myservo.write(goc_servo[0]); // servo off
-              state_read_done_vao = false;
-              state_read_done_ra = false;
-              delay(2000);
-              reset_all_state();
-            }
-            else
-            {
-              lcd_log(2, "Da xac nhan", 0, data);
-              Serial.println("ready_output_gate_done");
-              myservo.write(goc_servo[1]); // servo on
-              state_read_done_vao = false;
-              state_read_done_ra = true;
+              state_temp_1time_3 = true;
+              if (data == "No Found Id")
+              {
+                lcd_log(2, "That bai", 0, data);
+                Serial.println("ready_output_gate_fail");
+                myservo.write(goc_servo[0]); // servo off
+                state_read_done_vao = false;
+                state_read_done_ra = false;
+                delay(2000);
+                reset_all_state();
+              }
+              else
+              {
+                lcd_log(2, "Da xac nhan", 0, data);
+                Serial.println("ready_output_gate_done");
+                myservo.write(goc_servo[1]); // servo on
+                state_read_done_vao = false;
+                state_read_done_ra = true;
+              }
             }
           }
         }
-      }
-      if (state_read_done_ra == true)
-      {
-        if (stateHr == true)
+        if (state_read_done_ra == true)
         {
-          myservo.write(goc_servo[0]);
-          reset_all_state();
+          if (stateHr == true)
+          {
+            myservo.write(goc_servo[0]);
+            reset_all_state();
+          }
         }
       }
     }
   }
-}
 
-void lcd_log(int x1, String dt1, int x2, String dt2)
-{
-  lcd.clear();
-  lcd.setCursor(x1, 0);
-  lcd.print(dt1);
-  lcd.setCursor(x2, 1);
-  lcd.print(dt2);
-}
-
-void reset_all_state()
-{
-  state_temp_1time_1 = false;
-  state_temp_1time_2 = false;
-  state_temp_1time_3 = false;
-  state_temp_1time_4 = false;
-  state_read_vao = false, state_read_ra = false;
-  state_read_done_vao = false, state_read_done_ra = false;
-  state_read_rfid = false;
-}
-
-String read_data_serial()
-{
-  if (Serial.available() > 0)
+  void lcd_log(int x1, String dt1, int x2, String dt2)
   {
-    String receivedChar = Serial.readStringUntil('\n');
-    return receivedChar;
+    lcd.clear();
+    lcd.setCursor(x1, 0);
+    lcd.print(dt1);
+    lcd.setCursor(x2, 1);
+    lcd.print(dt2);
   }
-  return "NULL";
-}
+
+  void reset_all_state()
+  {
+    state_temp_1time_1 = false;
+    state_temp_1time_2 = false;
+    state_temp_1time_3 = false;
+    state_temp_1time_4 = false;
+    state_read_vao = false, state_read_ra = false;
+    state_read_done_vao = false, state_read_done_ra = false;
+    state_read_rfid = false;
+  }
+
+  String read_data_serial()
+  {
+    if (Serial.available() > 0)
+    {
+      String receivedChar = Serial.readStringUntil('\n');
+      return receivedChar;
+    }
+    return "NULL";
+  }

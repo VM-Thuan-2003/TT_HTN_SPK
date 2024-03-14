@@ -141,10 +141,9 @@ class Rfid():
                 id, text = self.reader.read()
                 return id, text
             except Exception as e:
-                Rfid.__set_flag_read_rfid__(self)
-				# raise e
-				id, text = Rfid.__read__(self)
-				return id, text
+                rfid.__set_flag_read_rfid__()
+                raise e
+                return None, None
         else:
             return None, None
 

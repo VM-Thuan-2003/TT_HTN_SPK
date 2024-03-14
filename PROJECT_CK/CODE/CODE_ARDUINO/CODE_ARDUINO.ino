@@ -157,7 +157,6 @@ void loop()
         }
       }
     }
-<<<<<<< HEAD
   }
   else
   {
@@ -174,13 +173,6 @@ void loop()
         state_temp_1time_2 = true;
         state_read_ra = true;
         lcd_log(4, "Xin Chao", 2, "Quet The Ra");
-=======
-    else {
-      // handle some statements about session output gate
-      if (state_temp_1time_1 == false) {
-        state_temp_1time_1 = true;
-        lcd_log(3, "Lay Xe Ve", 4, "Quet The");
->>>>>>> 66d5a83 (de)
         Serial.println("ready_output_gate");
       }
       if (statePir_2 == true && state_read_done_ra == false)
@@ -204,11 +196,7 @@ void loop()
             if (data == "No Found Id")
             {
               lcd_log(2, "That bai", 0, data);
-<<<<<<< HEAD
               Serial.println("ready_output_gate_fail");
-=======
-              Serial.println("ready_output_gate_fali");
->>>>>>> 66d5a83 (de)
               myservo.write(goc_servo[0]); // servo off
               state_read_done_vao = false;
               state_read_done_ra = false;

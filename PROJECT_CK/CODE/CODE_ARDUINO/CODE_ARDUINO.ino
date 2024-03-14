@@ -157,7 +157,6 @@ void loop()
         }
       }
     }
-  }
   else
   {
     // handle some statements about session output gate
@@ -175,16 +174,7 @@ void loop()
         lcd_log(4, "Xin Chao", 2, "Quet The Ra");
         Serial.println("ready_output_gate");
       }
-      if (statePir_2 == true && state_read_done_ra == false)
-      {
-        if (state_temp_1time_2 == false)
-        {
-          state_temp_1time_2 = true;
-          state_read_ra = true;
-          lcd_log(4, "Xin Chao", 2, "Quet The Ra");
-          Serial.println("ready_output_gate");
-        }
-      }
+      
       if (state_read_ra == true)
       {
         String data = read_data_serial();

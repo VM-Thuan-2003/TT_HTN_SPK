@@ -143,8 +143,8 @@ class Rfid():
             except Exception as e:
                 Rfid.__set_flag_read_rfid__(self)
 				# raise e
-				id, text = Rfid.__read__(self)
-				return id, text
+				# id, text = Rfid.__read__(self)
+				# return id, text
         else:
             return None, None
 
@@ -217,23 +217,18 @@ if __name__ == '__main__':
                             firstName = json.loads(text)["_fN_"]
                             fullName = firstName + lastName
                             if (state_mode == ModeVao):
-                                isDoneAdd, data_add = lineSlot.__add_slot__(
-                                    str(id)+","+fullName)
+                                isDoneAdd, data_add = lineSlot.__add_slot__(str(id)+","+fullName)
                                 ser.__write__(data_add)
                                 if isDoneAdd is True:
-                                    fireBase.__write__(
-                                        "list_slot", lineSlot.__read_all_slot__())
-                                    fireBase.__write__(
-                                        "empty_slot", lineSlot.__check_empty_slot__())
+                                    fireBase.__write__("list_slot", lineSlot.__read_all_slot__())
+                                    fireBase.__write__("empty_slot", lineSlot.__check_empty_slot__())
                             else:
                                 isDoneRmv, data_rmv = lineSlot.__remove_slot__(
                                     str(id)+","+fullName)
                                 ser.__write__(data_rmv)
                                 if isDoneRmv is True:
-                                    fireBase.__write__(
-                                        "list_slot", lineSlot.__read_all_slot__())
-                                    fireBase.__write__(
-                                        "empty_slot", lineSlot.__check_empty_slot__())
+                                    fireBase.__write__("list_slot", lineSlot.__read_all_slot__())
+                                    fireBase.__write__("empty_slot", lineSlot.__check_empty_slot__())
                         except Exception as e:
                             raise e
 

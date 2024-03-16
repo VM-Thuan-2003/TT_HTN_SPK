@@ -18,6 +18,7 @@ ModeRa = True
 
 state_mode = False  # False -> Vao | True -> Ra
 
+state_read = False
 
 class Firebase():
     def __init__(self):
@@ -195,23 +196,27 @@ if __name__ == '__main__':
         rfid = Rfid()
         fireBase = Firebase()
         lineSlot = LineSlot(3, 5, fireBase)
-        print(lineSlot.__check_empty_slot__())
+        print("__log_empty_slot__: ",lineSlot.__check_empty_slot__())
         while True:
             if (ser.__handel_serial_start__() == yes):
                 data = ser.__read__()
+                print("__log__: ", data)
                 if data is not None:
-                    print("__log__: ", data)
                     if data == "modeVao":
                         state_mode = ModeVao
                     elif data == "modeRa":
                         state_mode = ModeRa
                     elif data == "ready_input_gate" or data == "ready_output_gate":
                         rfid.__set_flag_read_rfid__()
+                        state_read = True
+                    elif data == "reset all state":
+                        rfid.__reset_flag_read_rfid__()
+                        state_read = False
                 else:
                     # No data
                     id, text = rfid.__read__()
                     if (id is not None and text is not None):
-                        print(id, text)
+                        print("__log_rfid__: ", id, text)
                         try:
                             lastName = json.loads(text)["_lN_"]
                             firstName = json.loads(text)["_fN_"]
@@ -235,7 +240,7 @@ if __name__ == '__main__':
                                     fireBase.__write__(
                                         "empty_slot", lineSlot.__check_empty_slot__())
                         except Exception as e:
-                            raise e
+                            continue
 
     except KeyboardInterrupt:
         GPIO.cleanup()

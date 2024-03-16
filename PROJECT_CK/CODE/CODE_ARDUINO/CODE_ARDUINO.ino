@@ -75,20 +75,22 @@ void loop() {
     if (state_servo_on == false) {
       state_servo_on = true;
       myservo.write(goc_servo[1]);
+      reset_all_state();
     }
   }
   else {
     if (state_servo_on == true) {
       state_servo_on = false;
       myservo.write(goc_servo[0]);
+      reset_all_state();
     }
   }
 
   if (stateCrlServo == false) {
     if (stateMode != stateMode_prev) {
         stateMode_prev = stateMode;
-        reset_all_state();
         Serial.println(stateMode == 1 ? "modeVao" : "modeRa");
+        reset_all_state();
       }
     if (stateMode == modeVao) {
       // handle some statements about session input gate
@@ -195,6 +197,7 @@ void reset_all_state() {
   state_read_vao = false, state_read_ra = false;
   state_read_done_vao = false, state_read_done_ra = false;
   state_read_rfid = false;
+  Serial.println("reset all state");
 }
 
 String read_data_serial() {

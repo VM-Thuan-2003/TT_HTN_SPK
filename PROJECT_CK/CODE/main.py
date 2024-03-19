@@ -142,10 +142,13 @@ class Rfid():
                 id, text = self.reader.read()
                 return id, text
             except Exception as e:
-                Rfid.__set_flag_read_rfid__(self)
+                # Rfid.__set_flag_read_rfid__(self)
+                fid.__reset_flag_read_rfid__()
+                state_read = False
                 # raise e
                 # id, text = Rfid.__read__(self)
                 # return id, text
+                return None, None
         else:
             return None, None
 
@@ -240,6 +243,8 @@ if __name__ == '__main__':
                                     fireBase.__write__(
                                         "empty_slot", lineSlot.__check_empty_slot__())
                         except Exception as e:
+                            rfid.__reset_flag_read_rfid__()
+                            state_read = False
                             continue
 
     except KeyboardInterrupt:

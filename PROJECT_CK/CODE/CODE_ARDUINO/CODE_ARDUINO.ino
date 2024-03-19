@@ -26,6 +26,8 @@ bool state_read_vao, state_read_ra;
 bool state_read_done_vao, state_read_done_ra;
 bool state_read_rfid;
 
+bool ttst_1;
+
 bool state_servo_on;
 
 void setup() {
@@ -53,6 +55,8 @@ void setup() {
   state_read_vao = false, state_read_ra = false;
   state_read_done_vao = false, state_read_done_ra = false;
   state_read_rfid = false;
+
+  ttst_1 = false;
 
   state_servo_on = false;
 
@@ -89,6 +93,7 @@ void loop() {
   if (stateCrlServo == false) {
     if (stateMode != stateMode_prev) {
         stateMode_prev = stateMode;
+        Serial.println("reset all state");
         Serial.println(stateMode == 1 ? "modeVao" : "modeRa");
         reset_all_state();
       }
@@ -127,6 +132,9 @@ void loop() {
               state_read_done_vao = true;
               state_read_done_ra  = false;
             }
+            if(data == "reset all state"){
+              reset_all_state();
+              }
           }
         }
       }
@@ -173,6 +181,9 @@ void loop() {
               state_read_done_vao = false;
               state_read_done_ra  = true;
             }
+            if(data == "reset all state"){
+              reset_all_state();
+              }
           }
         }
       }
